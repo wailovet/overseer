@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -35,8 +34,6 @@ func (f *File) Init() error {
 
 		// 以新的名字运行
 		os.Rename(path, path+"_old")
-		log.Println("os.Args[0]:", os.Args[0])
-		time.Sleep(time.Second * 15)
 		tmp, _ := ioutil.ReadFile(path + "_old")
 		ioutil.WriteFile(path, tmp, 755)
 	}
