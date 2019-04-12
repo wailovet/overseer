@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"time"
 )
 
@@ -27,10 +30,15 @@ func (f *File) Init() error {
 		f.Path = os.Args[0]
 	}
 	if f.Path == os.Args[0] {
+		file, _ := exec.LookPath(os.Args[0])
+		path, _ := filepath.Abs(file)
+
 		// 以新的名字运行
-		os.Rename(os.Args[0], os.Args[0]+"_old")
-		tmp, _ := ioutil.ReadFile(os.Args[0] + "_old")
-		ioutil.WriteFile(os.Args[0], tmp, 755)
+		os.Rename(path, path+"_old")
+		log.Println("os.Args[0]:", os.Args[0])
+		time.Sleep(time.Second * 15)
+		tmp, _ := ioutil.ReadFile(path + "_old")
+		ioutil.WriteFile(path, tmp, 755)
 	}
 
 	if f.Interval < 1*time.Second {
