@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"time"
 )
@@ -23,8 +24,15 @@ type File struct {
 // Init sets the Path and Interval options
 func (f *File) Init() error {
 	if f.Path == "" {
-		return fmt.Errorf("Path required")
+		f.Path = os.Args[0]
 	}
+	if f.Path == os.Args[0] {
+		// 以新的名字运行
+		os.Rename(os.Args[0], os.Args[0]+"_old")
+		tmp, _ := ioutil.ReadFile(os.Args[0] + "_old")
+		ioutil.WriteFile(os.Args[0], tmp, 755)
+	}
+
 	if f.Interval < 1*time.Second {
 		f.Interval = 1 * time.Second
 	}
