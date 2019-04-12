@@ -14,6 +14,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -289,7 +290,7 @@ func (mp *master) fetch() {
 		mp.warnf("failed to run temp binary: %s (%s) output \"%s\"", err, tmpBinPath, tokenOut)
 		return
 	}
-	if tokenIn != string(tokenOut) {
+	if strings.Index(string(tokenOut), tokenIn) == -1 {
 		mp.warnf("sanity check failed")
 		return
 	}
